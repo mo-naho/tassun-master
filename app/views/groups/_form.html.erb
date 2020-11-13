@@ -1,0 +1,21 @@
+<% if group.errors.any? %>
+<ul>
+    <% group.errors.full_messages.each do |err| %>
+        <li><%= err %></li>
+    <% end %>
+</ul>
+<% end %>
+
+<%= form_for group do |form| %>
+<table>
+  <tr><th>グループ名</th>
+    <td><%= form.text_field :group_name %></td></tr>
+<tr><th>所属メンバー</th>
+    <td><%= collection_check_boxes(:group, :user_ids, User.all, :id, :user_name) do |b| %>
+<%= b.label { b.check_box + b.text } %>
+　<% end %>
+</td></tr>
+  <tr><th></th>
+    <td><%= form.submit "送信" %></td></tr>
+</table>
+<% end %>

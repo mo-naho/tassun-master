@@ -1,0 +1,114 @@
+<div id="title">
+  <h1>たっすん（仮）</h1>
+  <p><span class="blue"><%= current_user.user_name %></span>のマイページ</p>
+</div>
+<div class="clear"></div>
+
+<hr style="border:0; border:3px solid black;">
+
+<div id="group">
+  <p><span class="font-size">所属グループ</span><br>→
+    <%= current_user.groups.each do |c| %>
+    <%= c.group_name %>,
+    <% end %>
+  </p>
+</div>
+
+<br><br>
+
+<%= month_calendar events: @tasks do |date, meetings| %>
+  <%= date.day %>
+
+  <% meetings.each do |meeting| %>
+    <div>
+      <% if meeting.user_id == current_user.id %>
+      <%= meeting.main %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<br><br>
+
+<h2><span class="blue"><%= current_user.user_name %></span>のタスク</h2>
+<table>
+  <tr>
+    <th>班</th><th>タスク内容</th><th>締め切り</th><th></th><th></th>
+  </tr>
+  <% @tasks.each do |obj| %>
+  <tr>
+    <% if obj.user_id == current_user.id %>
+    <td><%= obj.group.group_name %></td>
+    <td><%= obj.main %></td>
+    <td><%= obj.start_time %></td>
+    <td><a href="/tasks/<%= obj.id %>/edit">編集</a></td>
+    <td><%= link_to '達成！', obj, method: :delete, data: { confirm: '達成おめでとうございます！このタスクを消去します！' }, :style=>"text-decoration: none; color:blue;" %></td>
+  </tr>
+  <% end %>
+  <% end %>
+</table>
+<p><a href ="/tasks/new">タスク新規作成</a></p>
+
+<br><br>
+
+<h2>所属グループごとのタスク</h2>
+<% @groups.each do |a| %>
+  <% if current_user.groups.ids.include?(a.id) %>
+  <h3><%= a.group_name %></h3>
+<table>
+  <tr>
+    <th>名前</th><th>タスク内容</th><th>締め切り</th><th></th><th></th>
+  </tr>
+  <% @tasks.each do |obj| %>
+  <tr>
+    <% if a.id == obj.group_id %>
+    <td><%= obj.user.user_name %></td>
+    <td><%= obj.main %></td>
+    <td><%= obj.start_time %></td>
+    <td><a href="/tasks/<%= obj.id %>/edit">編集</a></td>
+    <td><%= link_to '削除', obj, method: :delete, data: { confirm: 'このデータを削除しますか?' }, :style=>"text-decoration: none; color:blue;" %></td>
+  </tr>
+  <% end %>
+  <% end %>
+</table>
+<% end %>
+<% end %>
+
+
+<% if false %>
+↑ここからコメントアウト
+<h2>グループ一覧</h2>
+<table>
+  <tr>
+      <th>グループ名</th><th>所属メンバー</th><th></th><th></th>
+  </tr>
+  <% @groups.each do |obj| %>
+  <tr>
+    <td><%= obj.group_name %></td>
+    <td>
+    <% obj.users.each do |c| %>
+		<%= c.user_name %>
+    <% end %>
+    </td>
+    <td><a href="/groups/<%= obj.id %>/edit">編集</a></td>
+    <td><%= link_to '削除', obj, method: :delete, data: { confirm: 'このデータを削除しますか?' } %></td>
+  </tr>
+  <% end %>
+</table>
+
+↓ここまで
+<% end %>
+
+<br><br>
+
+<p><a href ="/groups/new">グループ新規作成>></a></p>
+
+<div id="account_edit">
+  <p><a href ="/users/edit">アカウント編集>></a></p>
+</div>
+
+<div id="signout">
+  <%=link_to 'サインアウト', destroy_user_session_path, method: :delete, :style=>"text-decoration: none; color:blue;" %>
+</div>
+
+<br><br>

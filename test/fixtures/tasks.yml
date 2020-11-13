@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  main: MyText
+  deadline: 2017-12-22
+  taskable_id: 1
+  taskable_type: MyString
+
+two:
+  main: MyText
+  deadline: 2017-12-22
+  taskable_id: 1
+  taskable_type: MyString

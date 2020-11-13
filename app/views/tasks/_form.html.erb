@@ -1,0 +1,33 @@
+<% if task.errors.any? %>
+<ul>
+    <% task.errors.full_messages.each do |err| %>
+        <li><%= err %></li>
+    <% end %>
+</ul>
+<% end %>
+
+
+<h3><span class="blue"><%= current_user.user_name %></span>のタスク作成</h3>
+<%= form_for task do |form| %>
+<table>
+    <th class="border">グループ名</th>
+    <td><%= form.collection_select :group_id, Group.select { |a| current_user.groups.ids.include?(a.id) == true }, :id, :group_name, include_blank: '選択してください' %></td>
+    </tr>
+    <tr>
+    <th class="border">タスク内容</th>
+    <td class="text"><%= form.text_field :main, :size=>"40" %></td>
+    </tr>
+    <tr>
+    <th class="border">締め切り</th>
+    <td><%= raw sprintf(form.date_select(
+								:start_time,
+								use_month_numbers: true,
+								start_year:        Time.now.year,
+								end_year:          Time.now.year+1,
+								date_separator: '%s'),
+						'年 ', '月 ') + '日' %></td>
+    </tr>
+  <tr><th class="border-none"></th>
+    <td class="border-none"><%= form.submit "送信" %></td></tr>
+</table>
+<% end %>
